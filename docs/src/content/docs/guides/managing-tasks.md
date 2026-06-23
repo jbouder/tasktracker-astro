@@ -4,12 +4,12 @@ description: Create, organize, and complete tasks in Tasker.
 ---
 
 This guide walks through the core task workflow. Every action here maps to a
-backend endpoint documented in the [API reference](/reference/api/).
+backend endpoint documented in the [API reference](/tasktracker-astro/reference/api/).
 
 ## The task lifecycle
 
 A task moves through three states, surfaced in the UI as colored
-[badges](/guides/components/#badges):
+[badges](/tasktracker-astro/guides/components/#badges):
 
 | State | Badge | Meaning |
 | --- | --- | --- |
@@ -42,5 +42,5 @@ board until you archive them, which issues a `DELETE /api/tasks/{id}`.
 
 :::caution
 Archiving is permanent — there's no undo. The UI confirms with a destructive
-[Alert](/guides/components/#alerts) before the request is sent.
+[Alert](/tasktracker-astro/guides/components/#alerts) before the request is sent.
 :::

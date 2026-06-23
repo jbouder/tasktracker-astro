@@ -39,7 +39,7 @@ export function ButtonsDemo() {
         <Button loading loadingText="Saving…">
           Save
         </Button>
-        <Button variant="outline" render={<a href="/getting-started/" />}>
+        <Button variant="outline" render={<a href="/tasktracker-astro/getting-started/" />}>
           Docs link
         </Button>
       </div>

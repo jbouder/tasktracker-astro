@@ -54,6 +54,6 @@ commit. The backend uses `ruff` + `mypy` + `pytest` as its quality gate.
 
 ## Next steps
 
-- Learn the day-to-day workflow in [Managing tasks](/guides/managing-tasks/).
-- Browse the live UI building blocks in the [Component showcase](/guides/components/).
-- Look up endpoints in the [API reference](/reference/api/).
+- Learn the day-to-day workflow in [Managing tasks](/tasktracker-astro/guides/managing-tasks/).
+- Browse the live UI building blocks in the [Component showcase](/tasktracker-astro/guides/components/).
+- Look up endpoints in the [API reference](/tasktracker-astro/reference/api/).
