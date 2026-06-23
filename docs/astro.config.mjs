@@ -10,6 +10,9 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
+	// Project GitHub Pages: https://jbouder.github.io/tasktracker-astro/
+	site: 'https://jbouder.github.io',
+	base: '/tasktracker-astro/',
 	integrations: [
 		react(),
 		starlight({
