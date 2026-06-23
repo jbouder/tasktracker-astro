@@ -43,7 +43,7 @@ jobs:
 
       - name: Build
         working-directory: frontend
-        run: npm run build -- --base=/tasktracker/
+        run: npm run build -- --base=/tasktracker-astro/
 
       - name: Add SPA fallback
         working-directory: frontend
