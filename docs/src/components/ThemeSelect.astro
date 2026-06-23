@@ -1,0 +1,195 @@
+---
+/**
+ * Override of Starlight's built-in `ThemeSelect` (a <select> dropdown).
+ *
+ * Renders a 3-state segmented control — Light / Auto / Dark — with a sliding
+ * active pill. It drives the exact same theme model as Starlight core: the
+ * `starlight-theme` localStorage key plus `data-theme` on <html>, with `auto`
+ * following the system preference. Built from native radio inputs (visually
+ * hidden) so it stays keyboard- and screen-reader-accessible.
+ */
+import { Icon } from '@astrojs/starlight/components';
+
+const options = [
+  { value: 'light', label: Astro.locals.t('themeSelect.light'), icon: 'sun' },
+  { value: 'auto', label: Astro.locals.t('themeSelect.auto'), icon: 'laptop' },
+  { value: 'dark', label: Astro.locals.t('themeSelect.dark'), icon: 'moon' },
+] as const;
+---
+
+<tasker-theme-select>
+  <fieldset class="theme-select">
+    <legend class="sr-only">{Astro.locals.t('themeSelect.accessibleLabel')}</legend>
+    <span class="indicator" aria-hidden="true"></span>
+    {
+      options.map((option) => (
+        <label title={option.label}>
+          {/* `auto` is checked in SSR; the inline script below corrects it
+              from localStorage before paint to avoid a flash. */}
+          <input
+            type="radio"
+            name="tasker-theme"
+            value={option.value}
+            checked={option.value === 'auto'}
+          />
+          <Icon name={option.icon} />
+          <span class="sr-only">{option.label}</span>
+        </label>
+      ))
+    }
+  </fieldset>
+</tasker-theme-select>
+
+{/* Set the correct segment before paint, reusing Starlight's stored value. */}
+<script is:inline>
+  (() => {
+    const stored =
+      (typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme')) || 'auto';
+    const theme = stored === 'light' || stored === 'dark' ? stored : 'auto';
+    document.querySelectorAll('tasker-theme-select').forEach((picker) => {
+      const input = picker.querySelector(`input[value="${theme}"]`);
+      if (input) input.checked = true;
+    });
+  })();
+</script>
+
+<script>
+  type Theme = 'auto' | 'dark' | 'light';
+
+  const storageKey = 'starlight-theme';
+
+  const parseTheme = (theme: unknown): Theme =>
+    theme === 'auto' || theme === 'dark' || theme === 'light' ? theme : 'auto';
+
+  const loadTheme = (): Theme =>
+    parseTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey));
+
+  function storeTheme(theme: Theme): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(storageKey, theme === 'light' || theme === 'dark' ? theme : '');
+    }
+  }
+
+  const getPreferredColorScheme = (): Theme =>
+    matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+
+  /** Apply a theme everywhere: <html>, localStorage, and every picker's UI. */
+  function onThemeChange(theme: Theme): void {
+    document.documentElement.dataset.theme =
+      theme === 'auto' ? getPreferredColorScheme() : theme;
+    storeTheme(theme);
+    document.querySelectorAll('tasker-theme-select').forEach((picker) => {
+      const input = picker.querySelector<HTMLInputElement>(`input[value="${theme}"]`);
+      if (input) input.checked = true;
+    });
+  }
+
+  // Keep `auto` in sync when the system scheme changes.
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+    if (loadTheme() === 'auto') onThemeChange('auto');
+  });
+
+  class TaskerThemeSelect extends HTMLElement {
+    constructor() {
+      super();
+      onThemeChange(loadTheme());
+      this.addEventListener('change', (e) => {
+        if (e.target instanceof HTMLInputElement) {
+          onThemeChange(parseTheme(e.target.value));
+        }
+      });
+    }
+  }
+  customElements.define('tasker-theme-select', TaskerThemeSelect);
+</script>
+
+<style>
+  .theme-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0.1875rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 999rem;
+    background: var(--sl-color-gray-6);
+  }
+
+  .theme-select label {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: 999rem;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    transition: color var(--duration-fast, 100ms) var(--ease-standard, ease);
+  }
+
+  .theme-select label:hover {
+    color: var(--sl-color-white);
+  }
+
+  /* Active segment text colour, driven by which radio is checked. */
+  .theme-select:has([value='light']:checked) label:nth-of-type(1),
+  .theme-select:has([value='auto']:checked) label:nth-of-type(2),
+  .theme-select:has([value='dark']:checked) label:nth-of-type(3) {
+    color: var(--sl-color-text-accent);
+  }
+
+  .theme-select :global(svg) {
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+
+  /* Visually-hidden radios — the label/icon is the visible control. */
+  .theme-select input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Sliding active pill. translateX by whole multiples of a segment width. */
+  .indicator {
+    position: absolute;
+    inset-block: 0.1875rem;
+    inset-inline-start: 0.1875rem;
+    inline-size: 1.75rem;
+    border-radius: 999rem;
+    background: var(--sl-color-bg);
+    box-shadow: 0 1px 2px color-mix(in oklab, var(--sl-color-black) 35%, transparent);
+    transition: transform var(--duration-base, 200ms) var(--ease-emphasized, ease);
+  }
+
+  .theme-select:has([value='auto']:checked) .indicator {
+    transform: translateX(100%);
+  }
+
+  .theme-select:has([value='dark']:checked) .indicator {
+    transform: translateX(200%);
+  }
+
+  /* Keyboard focus lands on the hidden radio — surface it on the segment. */
+  .theme-select label:has(input:focus-visible) {
+    outline: 2px solid var(--sl-color-text-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-select label,
+    .indicator {
+      transition: none;
+    }
+  }
+</style>

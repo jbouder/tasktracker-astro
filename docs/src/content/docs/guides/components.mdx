@@ -1,0 +1,71 @@
+---
+title: Component showcase
+description: Live Nebari design-system components rendered inside the docs.
+---
+
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+import { ButtonsDemo } from '@/components/demos/ButtonsDemo';
+import { BadgesDemo } from '@/components/demos/BadgesDemo';
+import { AlertsDemo } from '@/components/demos/AlertsDemo';
+import { SettingsSwitch } from '@/components/demos/SettingsSwitch';
+
+These are the **actual** [Nebari design-system](https://github.com/nebari-dev/nebari-design)
+React components the Tasker app ships — installed from the `@nebari` shadcn
+registry and rendered live on this page. The docs and the app share one set of
+brand tokens, so what you see here matches the product exactly. Toggle the
+theme switch in the header and watch every component re-theme.
+
+<Aside type="tip">
+Each demo below is a hydrated React island (`client:load`), so the buttons,
+toggles, and links are genuinely interactive — not screenshots.
+</Aside>
+
+## Buttons
+
+The `Button` ships six variants, four sizes, a `loading` state, and Base UI
+`render`-prop composition (render it as a link without losing its styling).
+
+<Card title="Button">
+	<ButtonsDemo client:load />
+</Card>
+
+## Badges
+
+Small status chips — Tasker uses these for a task's lifecycle state.
+
+<Card title="Badge">
+	<BadgesDemo client:load />
+</Card>
+
+## Alerts
+
+Inline, non-blocking status messages with semantic severity variants. Each is a
+live region announced to screen readers (`status` for calm variants, `alert` for
+`warning`/`destructive`).
+
+<Card title="Alert">
+	<AlertsDemo client:load />
+</Card>
+
+## Switch
+
+A toggle for settings that apply immediately. This one is controlled, so its
+label updates as you flip it.
+
+<Card title="Switch">
+	<SettingsSwitch client:load />
+</Card>
+
+## How this works
+
+<CardGrid>
+	<Card title="Shared tokens" icon="puzzle">
+		The Nebari OKLCH color tokens live in `src/styles/global.css` and are also
+		mapped onto Starlight's `--sl-*` chrome variables — one palette, whole site.
+	</Card>
+	<Card title="Installed, not forked" icon="approve-check">
+		Components come from the `@nebari` registry and are treated as
+		upstream-managed. We style at the call site via `className` and the `render`
+		prop — never by editing `src/components/ui/*`.
+	</Card>
+</CardGrid>

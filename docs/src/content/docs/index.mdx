@@ -1,0 +1,63 @@
+---
+title: Tasker
+description: Documentation for Tasker — a full-stack task management app built with FastAPI and React.
+template: splash
+hero:
+  tagline: A full-stack task manager — FastAPI on the back, React + the Nebari design system on the front.
+  actions:
+    - text: Get started
+      link: /getting-started/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/jbouder/tasktracker-astro
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Explore the docs
+
+<CardGrid>
+	<LinkCard
+		title="Getting started"
+		description="Install, run the backend and frontend, and open the app locally."
+		href="/getting-started/"
+	/>
+	<LinkCard
+		title="Managing tasks"
+		description="A guided tour of creating, organizing, and completing tasks."
+		href="/guides/managing-tasks/"
+	/>
+	<LinkCard
+		title="Component showcase"
+		description="Live Nebari design-system components rendered inside the docs."
+		href="/guides/components/"
+	/>
+	<LinkCard
+		title="API reference"
+		description="Endpoints, request and response shapes for the FastAPI backend."
+		href="/reference/api/"
+	/>
+</CardGrid>
+
+## Why Tasker
+
+<CardGrid stagger>
+	<Card title="Typed end to end" icon="seti:typescript">
+		React 19 + TypeScript on the front, async SQLAlchemy 2 + Pydantic on the
+		back. The contract is typed at both ends.
+	</Card>
+	<Card title="On-brand by default" icon="puzzle">
+		The UI is built from the **Nebari design system** — and so are these docs.
+		One set of tokens themes the whole product.
+	</Card>
+	<Card title="Fast inner loop" icon="rocket">
+		Vite + a FastAPI `--reload` server proxied at `/api`. Save a file, see the
+		change.
+	</Card>
+	<Card title="Batteries included" icon="setting">
+		Postgres, Alembic migrations, TanStack Query, and Jotai are wired up out of
+		the box.
+	</Card>
+</CardGrid>

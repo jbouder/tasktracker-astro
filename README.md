@@ -7,7 +7,8 @@ A full-stack monorepo with a React + TypeScript frontend and a Python FastAPI ba
 ```
 tasktracker/
 ├── backend/     FastAPI · PostgreSQL · async SQLAlchemy 2 · Alembic · uv
-└── frontend/    React 19 · TypeScript · Vite · Tailwind v4 · shadcn/ui
+├── frontend/    React 19 · TypeScript · Vite · Tailwind v4 · shadcn/ui
+└── docs/        Astro · Starlight · Nebari design system
 ```
 
 Each package has its own `README.md` and `AGENTS.md` with full conventions.
@@ -36,6 +37,18 @@ npm run dev        # http://localhost:5173
 
 The Vite dev server proxies `/api` → `http://localhost:8000`, so run the
 backend alongside the frontend during development.
+
+### Docs (`docs/`)
+
+```bash
+cd docs
+npm install
+npm run dev        # http://localhost:4321
+```
+
+An Astro + Starlight documentation site, themed with the same Nebari design
+system as the frontend (shared tokens, fonts, and live Nebari components). See
+`docs/README.md` for how the theming works.
 
 ## Conventions
 

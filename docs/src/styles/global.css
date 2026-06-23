@@ -1,0 +1,347 @@
+/* ───────────────────────────────────────────────────────────────────────────
+ * TaskTracker docs — Nebari-themed Starlight stylesheet
+ *
+ * This file does three jobs:
+ *   1. Wires Tailwind v4 into Starlight (layered import order).
+ *   2. Ports the Nebari design-system tokens from `frontend/src/index.css`
+ *      so installed @nebari components resolve `bg-primary`, `text-muted-
+ *      foreground`, `animate-*`, etc.
+ *   3. Maps those Nebari tokens onto Starlight's own `--sl-*` chrome variables
+ *      so the sidebar, header, links and accents are on-brand.
+ *
+ * Dark-mode model: Starlight toggles `data-theme="dark|light"` on <html> and
+ * treats DARK as the default (`:root`), LIGHT as the override
+ * (`:root[data-theme='light']`). We mirror that exactly so the Nebari tokens
+ * and the Starlight chrome always flip together from Starlight's theme switch.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+@layer base, starlight, theme, components, utilities;
+
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Nebari brand fonts (Geist + IBM Plex Mono) */
+@import '@fontsource-variable/geist';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+/* Let Nebari components that use `dark:` respond to Starlight's data-theme too.
+ * (Nebari mostly uses semantic tokens, so this is belt-and-braces.) */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, .dark, .dark *));
+
+/* ===========================================================================
+ * Nebari semantic tokens — DARK is the default set (matches Starlight)
+ * Ported from frontend/src/index.css (.dark block).
+ * ======================================================================== */
+:root,
+:root[data-theme='dark'],
+.dark {
+  --background: oklch(26.94% 0.0037 286.15);
+  --foreground: oklch(97.91% 0 0);
+
+  --card: oklch(33.01% 0.0052 286.11);
+  --card-foreground: oklch(97.91% 0 0);
+
+  --popover: oklch(26.94% 0.0037 286.15);
+  --popover-foreground: oklch(97.91% 0 0);
+
+  --primary: oklch(61.98% 0.2159 311.67);
+  --primary-foreground: oklch(0% 0 0);
+
+  --secondary: oklch(40% 0.0269 250.57);
+  --secondary-foreground: oklch(95.04% 0.0042 236.50);
+
+  --muted: oklch(33.01% 0.0052 286.11);
+  --muted-foreground: oklch(69.88% 0.0130 286.06);
+
+  --accent: oklch(40% 0.0269 250.57);
+  --accent-foreground: oklch(95.04% 0.0042 236.50);
+
+  --pill-category-fg: #ffffff;
+
+  --destructive: oklch(33.1% 0.1332 27.42);
+  --destructive-foreground: oklch(78.02% 0.1024 27.78);
+
+  --border: oklch(47.01% 0.0112 285.96);
+  --border-strong: oklch(61.96% 0.0134 286.00);
+  --input: oklch(54.86% 0.0154 285.88);
+  --ring: oklch(69.98% 0.1926 311.48);
+
+  --chart-1: oklch(69.98% 0.1926 311.48);
+  --chart-2: oklch(69.9% 0.0995 187.56);
+  --chart-3: oklch(77.95% 0.1259 85.96);
+  --chart-4: oklch(69.95% 0.1433 264.44);
+  --chart-5: oklch(69.96% 0.1814 149.67);
+
+  --primary-hover: oklch(69.98% 0.1926 311.48);
+  --warning: oklch(33.09% 0.0677 92.20);
+  --warning-foreground: oklch(87.09% 0.1248 91.93);
+  --success: oklch(32.88% 0.0887 149.73);
+  --success-foreground: oklch(87.04% 0.0814 149.55);
+  --info: oklch(33.01% 0.1387 264.40);
+  --info-foreground: oklch(87.12% 0.0567 264.22);
+
+  --radius: 0.625rem;
+  --text-secondary: #d0d5dd;
+
+  --sidebar: oklch(26.94% 0.0037 286.15);
+  --sidebar-foreground: oklch(97.91% 0 0);
+  --sidebar-primary: oklch(61.98% 0.2159 311.67);
+  --sidebar-primary-foreground: oklch(0% 0 0);
+  --sidebar-accent: oklch(40% 0.0269 250.57);
+  --sidebar-accent-foreground: oklch(95.04% 0.0042 236.50);
+  --sidebar-border: oklch(47.01% 0.0112 285.96);
+  --sidebar-ring: oklch(69.98% 0.1926 311.48);
+}
+
+/* ===========================================================================
+ * Nebari semantic tokens — LIGHT set (Starlight light mode)
+ * Ported from frontend/src/index.css (:root block).
+ * ======================================================================== */
+:root[data-theme='light'] {
+  --background: oklch(97.91% 0 0);
+  --foreground: oklch(26.94% 0.0037 286.15);
+
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(26.94% 0.0037 286.15);
+
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(26.94% 0.0037 286.15);
+
+  --primary: oklch(55.06% 0.1886 311.45);
+  --primary-foreground: oklch(100% 0 0);
+
+  --secondary: oklch(95.04% 0.0042 236.50);
+  --secondary-foreground: oklch(32.95% 0.0209 254.12);
+
+  --muted: oklch(94.94% 0.0013 286.37);
+  --muted-foreground: oklch(54.86% 0.0154 285.88);
+
+  --accent: oklch(95.04% 0.0042 236.50);
+  --accent-foreground: oklch(32.95% 0.0209 254.12);
+
+  --pill-category-fg: #475467;
+
+  --destructive: oklch(95.06% 0.0247 29.93);
+  --destructive-foreground: oklch(54.97% 0.2151 27.33);
+
+  --border: oklch(78.06% 0.0056 286.27);
+  --border-strong: oklch(61.96% 0.0134 286.00);
+  --input: oklch(69.88% 0.0130 286.06);
+  --ring: oklch(61.98% 0.2159 311.67);
+
+  --chart-1: oklch(61.98% 0.2159 311.67);
+  --chart-2: oklch(61.96% 0.0932 187.62);
+  --chart-3: oklch(70.05% 0.1417 86.43);
+  --chart-4: oklch(62.1% 0.1880 264.30);
+  --chart-5: oklch(61.95% 0.1718 149.70);
+
+  --primary-hover: oklch(47.01% 0.1577 311.26);
+  --warning: oklch(95.02% 0.0692 92.11);
+  --warning-foreground: oklch(46.91% 0.0960 91.90);
+  --success: oklch(94.94% 0.0433 149.41);
+  --success-foreground: oklch(47.01% 0.1313 149.41);
+  --info: oklch(95.08% 0.0232 264.46);
+  --info-foreground: oklch(47.06% 0.2174 264.33);
+
+  --text-secondary: #4e596a;
+
+  --sidebar: oklch(97.91% 0 0);
+  --sidebar-foreground: oklch(26.94% 0.0037 286.15);
+  --sidebar-primary: oklch(55.06% 0.1886 311.45);
+  --sidebar-primary-foreground: oklch(100% 0 0);
+  --sidebar-accent: oklch(95.04% 0.0042 236.50);
+  --sidebar-accent-foreground: oklch(32.95% 0.0209 254.12);
+  --sidebar-border: oklch(78.06% 0.0056 286.27);
+  --sidebar-ring: oklch(61.98% 0.2159 311.67);
+}
+
+/* ===========================================================================
+ * Tailwind @theme inline mapping — exposes the tokens as utilities
+ * (bg-primary, text-muted-foreground, animate-fade-in, …). Ported verbatim
+ * from frontend/src/index.css so installed @nebari components style correctly.
+ * ======================================================================== */
+@theme inline {
+  --font-sans: 'Geist Variable', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius: 0.625rem;
+
+  --duration-fast: 100ms;
+  --duration-base: 200ms;
+  --duration-slow: 350ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-fade-in: nebari-fade-in var(--duration-base) var(--ease-standard) both;
+  --animate-fade-out: nebari-fade-out var(--duration-base) var(--ease-standard) both;
+  --animate-slide-up-fade: nebari-slide-up-fade var(--duration-base) var(--ease-emphasized) both;
+  --animate-slide-down-fade: nebari-slide-down-fade var(--duration-base) var(--ease-emphasized) both;
+
+  --color-border-strong: var(--border-strong);
+  --color-info-foreground: var(--info-foreground);
+  --color-info: var(--info);
+  --color-success-foreground: var(--success-foreground);
+  --color-success: var(--success);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning: var(--warning);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-primary-hover: var(--primary-hover);
+
+  @keyframes nebari-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes nebari-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @keyframes nebari-slide-up-fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes nebari-slide-down-fade {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(6px); }
+  }
+}
+
+/* ===========================================================================
+ * Map Nebari tokens onto Starlight's chrome variables.
+ * Unlayered rules → these win over Starlight's own layered `--sl-*` defaults.
+ * ======================================================================== */
+
+/* Shared (both themes): brand fonts + radius for the whole Starlight UI. */
+:root {
+  --sl-font: 'Geist Variable', sans-serif;
+  --sl-font-mono: 'IBM Plex Mono', monospace;
+}
+
+/* Dark theme (default) → Nebari dark palette + purple accent ramp. */
+:root,
+:root[data-theme='dark'] {
+  --sl-color-accent-low: oklch(33% 0.13 311);
+  --sl-color-accent: var(--primary);
+  --sl-color-accent-high: oklch(86% 0.09 311);
+
+  --sl-color-white: var(--foreground);
+  --sl-color-gray-1: oklch(92% 0.004 286);
+  --sl-color-gray-2: oklch(80% 0.006 286);
+  --sl-color-gray-3: var(--muted-foreground);
+  --sl-color-gray-4: oklch(47% 0.011 286);
+  --sl-color-gray-5: oklch(38% 0.006 286);
+  --sl-color-gray-6: var(--card);
+  --sl-color-black: var(--background);
+
+  --sl-color-text: var(--foreground);
+  --sl-color-text-accent: var(--sl-color-accent-high);
+  --sl-color-bg: var(--background);
+  --sl-color-bg-nav: var(--background);
+  --sl-color-bg-sidebar: var(--background);
+  --sl-color-bg-inline-code: var(--card);
+  --sl-color-hairline: var(--border);
+  --sl-color-hairline-light: color-mix(in oklab, var(--border) 60%, transparent);
+  --sl-color-hairline-shade: var(--card);
+}
+
+/* Light theme → Nebari light palette. */
+:root[data-theme='light'] {
+  --sl-color-accent-low: oklch(92% 0.05 311);
+  --sl-color-accent: var(--primary);
+  --sl-color-accent-high: var(--primary-hover);
+
+  --sl-color-white: var(--foreground);
+  --sl-color-gray-1: oklch(33% 0.004 286);
+  --sl-color-gray-2: var(--muted-foreground);
+  --sl-color-gray-3: oklch(64% 0.008 286);
+  --sl-color-gray-4: var(--border);
+  --sl-color-gray-5: oklch(90% 0.002 286);
+  --sl-color-gray-6: var(--muted);
+  --sl-color-gray-7: oklch(98% 0 0);
+  --sl-color-black: var(--background);
+
+  --sl-color-text: var(--foreground);
+  --sl-color-text-accent: var(--primary);
+  --sl-color-bg: var(--background);
+  --sl-color-bg-nav: var(--card);
+  --sl-color-bg-sidebar: var(--card);
+  --sl-color-bg-inline-code: var(--muted);
+  --sl-color-hairline: var(--border);
+  --sl-color-hairline-light: color-mix(in oklab, var(--border) 60%, transparent);
+  --sl-color-hairline-shade: var(--muted);
+}
+
+/* A touch of brand polish: round the hero call-to-action + cards. */
+:root {
+  --sl-content-width: 50rem;
+}
+
+/* ===========================================================================
+ * Header tweak: right-align the search box.
+ * Starlight's desktop header is a 3-column grid (title · search 1fr · right
+ * group). The search button is capped at 22rem but left-aligns inside its
+ * stretchy column, landing left-of-center. Pushing its column's content to the
+ * end seats it next to the social/theme group on the right. Unlayered so it
+ * wins over Starlight's `@layer starlight.core` rule without `!important`.
+ * ======================================================================== */
+@media (min-width: 50rem) {
+  .header > div:nth-child(2) {
+    justify-content: flex-end;
+  }
+}
+
+/* Hero call-to-action buttons: Starlight defaults to a full pill (999rem).
+ * Dial it back to the Nebari corner radius so they match the brand buttons.
+ * Unlayered → wins over Starlight's `@layer starlight.components`. */
+.sl-link-button {
+  border-radius: var(--radius);
+}
